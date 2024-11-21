@@ -1,4 +1,4 @@
-function esq = veradel (im)
+function esq = veradel_isa (im)
 
 % Calcula el esqueleto de una imagen binaria mediante el algoritmo de Zang y Suen 
 % mostrando sobre una imagen la progresión del resultado.
