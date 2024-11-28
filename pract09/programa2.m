@@ -23,7 +23,8 @@ function [n] = programa2(img)
         pro = regionprops (dig,'EulerNumber','ConvexArea', 'Centroid'); 
 
         % end points
-        skel = bwskel(dig,'minbranchlength',20);    
+        skel = bwmorph(dig, 'thin', inf);
+        %skel = bwskel(dig,'minbranchlength',20);    
         endp = bwmorph(skel,'endpoints');
         nend = sum(sum(endp));
 
