@@ -3,16 +3,21 @@
 ## Entorno
 ```bash
 cd /src/2425sspp
-conda create -n sspp
-conda activate sspp
-conda install jupyter matplotlib numpy
-conda list | find "matplotlib"
+
 # conda install --channel https://conda.anaconda.org/menpo opencv3
+conda install -n sspp numpy opencv jupyter matplotlib
+conda update menuinst
+conda install notebook
+conda activate sspp
+conda install urllib2
+conda list | find "matplotlib"
+
 ```
 
 Enlaces:
 - Librerías imágenes Python: https://neptune.ai/blog/image-processing-python-libraries-for-machine-learning
 - Instalación fallida OpenCV: https://stackoverflow.com/questions/23119413/how-do-i-install-python-opencv-through-conda
+- Dependencia opencv con python 3.7: https://github.com/conda/conda/issues/9664
 
 ## Tema 6 - Segmentación
 
