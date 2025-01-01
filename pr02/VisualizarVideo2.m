@@ -1,4 +1,4 @@
-function VisualizarVideo2(fichero)
+function VisualizarVideo2(fichero, gain)
 % Muestra sobre una figura el video contenido en fichero especificado con
 % entrada. Se muestra fra me a frame hasta completar el fichero o se emplee
 % la rueda del ratón sobre la figura. Se puede pausar el video haciendo
@@ -8,10 +8,14 @@ function VisualizarVideo2(fichero)
 % a la función 'Terminar' o 'Pausar' por medio del ratón.
 
 global fin
+
+   
 fin = 0;
 f = figure;
 f.ButtonDownFcn = @Pausar;
 f.WindowScrollWheelFcn = @Terminar;
+if ~exist('gain','var'), gain=5; end
+
 %--------------------------------------------------------------
 
 v = VideoReader(fichero); % Abre el fichero y se posiciona sobre el 
@@ -19,16 +23,14 @@ v = VideoReader(fichero); % Abre el fichero y se posiciona sobre el
                           % sobre la variable 'v'
 
 % Se ejecuta hasta que se complete en video o se cancele la ejecución. 
-imPrev = double(rgb2gray(readFrame(v)))/255; %Lee el primer frame
+imPrev = rgb2gray(readFrame(v)); %Lee el primer frame
 while (not(fin) && hasFrame(v)) 
-    im    = readFrame(v); %Lee el siguente frame del fichero.
-    imCur = double(rgb2gray(readFrame(v)))/255; % siguiente frame
-    imDif = 5*abs(imPrev-imCur);
+    im = readFrame(v);
+    imCur = rgb2gray(im); % siguiente frame
+    imDif = gain*abs(imPrev-imCur);
     imPrev = imCur;
-    subplot(1,2,1);
-    imshow (im);
-    subplot(1,2,2);
-    imshow(imDif);
+    subplot(121); imshow (im);
+    subplot(1,2,2); imshow(imDif);
     drawnow;
 end
 close % cierra la ventana

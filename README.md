@@ -10,8 +10,10 @@ conda update menuinst
 conda install notebook
 conda activate sspp
 conda install urllib2
-conda list | find "matplotlib"
+conda install -c conda-forge ffmpeg
 
+conda install bokeh
+conda list | find "matplotlib"
 ```
 
 Enlaces:

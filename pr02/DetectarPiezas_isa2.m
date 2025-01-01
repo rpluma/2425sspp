@@ -1,46 +1,46 @@
-function DetectarPiezas_isa(fichero, hsv, pausar)
+function DetectarPiezas_isa2(fichero)
 
 global fin;
+global dif;
 fin = 0;
 f = figure;
+f.set('Name', 'FIGURE 5')
 f.ButtonDownFcn = @Pausar;
 f.WindowScrollWheelFcn = @Terminar;
 
 v = VideoReader(fichero);
 
-im = readFrame(v); %Toma imagen de referencia
-
-imHSV      = rgb2hsv(im); %Comvierte a HSV
-if ~exist('hsv','var'), hsv=3; end
-referencia = imHSV(100,80:380,hsv);  % Guarda linea de control (cinta vacia) 
-                                   % Selecciona componente V
 umbral1 = 0.5;
 umbral2 = 20;
 
-if ~exist('pausar','var'), pausar=false; end
-dentro = 0;
+im = readFrame(v); %Toma imagen de referencia
+
+imHSV      = rgb2hsv(im); %Comvierte a HSV
+referencia = imHSV(100,80:380,3);  % Guarda linea de control (cinta vacia) 
+                                   % Selecciona componente V
+estado = 0; % autómata para parar el vídeo sólo al inicio de la detección
+
 while not(fin) && hasFrame(v)
     im    = readFrame(v);          %Tomar nueva imagen
     imHSV = rgb2hsv(im);           %Convertir a HSV
-    nueva = imHSV(100,80:380,hsv);   %Seleccionar linea de control 
+    nueva = imHSV(100,80:380,3);   %Seleccionar linea de control 
     dif   = abs(referencia-nueva); %Calcula las direncias en la linea de control
     
+    haypieza=sum(dif>umbral1)>umbral2;
+
     subplot(2,1,1),
     imshow(im);                    %Muestra la imagen RGB
     hold on
-    if (sum(dif>umbral1)>umbral2)
-        plot([80 380],[100 100],'-r');
-        if pausar && not(dentro)
-            dentro = 1;
+    if haypieza
+        plot([80 380],[100 100],'-r'); %Dibuja encima la linea de control (rojo)
+        if estado == 0
+            estado = 1;
             pause;
         end
     else
-        plot([80 380],[100 100],'-g');
-        if pausar && dentro
-            dentro = 0;
-        end
+        plot([80 380],[100 100],'-g'); %Dibuja encima la linea de control (verde)
+        estado = 0;
     end
-    
     hold off
     %---------------------------
     subplot(2,1,2),
@@ -52,10 +52,12 @@ close(f)
 end
 
 function Pausar(~,~)
+    global dif;
+    dif
     pause;
 end
 
 function Terminar(~,~)
-       global fin
+   global fin
    fin = 1;
 end
