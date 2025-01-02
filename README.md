@@ -14,6 +14,8 @@ conda install -c conda-forge ffmpeg
 
 conda install bokeh
 conda list | find "matplotlib"
+git ls-files -d (muestra ficheros borrados)
+
 ```
 
 Enlaces:
